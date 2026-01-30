@@ -25,7 +25,7 @@ const userSlice = createSlice({
             state.loading = false
         })
 
-        builder.addCase(fetchUsers.rejected, (state,action)=>{
+        builder.addCase(fetchUsers.rejected, (state)=>{
             state.loading = false
             state.error = 'somethin went wrong while calling user api'
         })
