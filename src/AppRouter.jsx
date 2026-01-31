@@ -2,6 +2,7 @@
 import { Route, Routes } from "react-router-dom";
 import UserForm from "./components/login-form/UserForm";
 import App from "./App";
+import LoginForm from "./components/login.Login";
 // import DeliveryTrip from "./features/DeliveryTrip/DeliveryTrip.tsx";
 // import NotFound from "./features/NotFound/NotFound.tsx";
 // import { Page } from "./features/Page/Page.tsx";
@@ -17,17 +18,9 @@ import App from "./App";
 // type RouteConfig = Array<[string, JSX.Element, isRouteActive]>;
 
 const pageRoutes = [
- 
-  [
-    "/login",
-    <UserForm />,
-    true,
-  ],
-  [
-    "/",
-    <App/>,
-    true
-  ]
+  ["/register", <UserForm />, true],
+  ["/login", <LoginForm />, true],
+  ["/", <App />, true],
 ];
 
 export default function AppRoutes() {

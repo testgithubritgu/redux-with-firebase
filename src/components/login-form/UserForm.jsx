@@ -2,6 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { auth, db } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
@@ -13,6 +17,7 @@ const formSchema = z.object({
 // type FormData = z.infer<typeof formSchema>;
 
 function UserForm() {
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -21,8 +26,29 @@ function UserForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  const onSubmit = async(data) => {
+    console.log(data)
+   try {
+       await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+  
+      const user = auth.currentUser
+      console.log(user)
+      if(user){
+          await setDoc(doc(db, "Users", user.uid), {
+            name: data.name,
+            email: data.email,
+            role: data.role,
+          });
+      }
+      
+    } catch (error) {
+      console.error("Firebase Error:", error);
+    }
+  
   };
 
   return (
@@ -99,8 +125,9 @@ function UserForm() {
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
         >
-          Submit
+          SignUp
         </button>
+        <button type="button" onClick={()=>navigate("/login")}>Go To Login</button>
       </form>
     </div>
   );

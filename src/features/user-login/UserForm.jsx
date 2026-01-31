@@ -2,7 +2,9 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "@/components/firebase";
+import { setDoc, doc } from "firebase/firestore";
 const formSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
   email: z.string().email("Invalid email address"),
@@ -17,12 +19,36 @@ function UserForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  const onSubmit = async (data) => {
+    try {
+    await createUserWithEmailAndPassword(
+      auth,
+      data.email,
+      data.password
+    );
+    const user  = auth.currentUser
+  
+      if(user){
+         const docRef = await setDoc(doc(db, "Users", user.uid), {
+           name: data.name,
+           email: data.email,
+           lastname: "raut",
+         });
+         console.log("Document written with ID: ", docRef.id);
+      }
+    
+
+    console.log("Form Data:", data.email);
+
+
+  } catch (error) {
+    console.error("Firebase Error:", error.message);
+  }
+
   };
 
   return (
