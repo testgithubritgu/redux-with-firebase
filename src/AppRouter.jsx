@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import UserForm from "./components/login-form/UserForm";
 import App from "./App";
 import LoginForm from "./components/login.Login";
+import Profile from "./components/profile/Profile";
 // import DeliveryTrip from "./features/DeliveryTrip/DeliveryTrip.tsx";
 // import NotFound from "./features/NotFound/NotFound.tsx";
 // import { Page } from "./features/Page/Page.tsx";
@@ -19,6 +20,7 @@ import LoginForm from "./components/login.Login";
 
 const pageRoutes = [
   ["/register", <UserForm />, true],
+  ["/profile", <Profile />, true],
   ["/login", <LoginForm />, true],
   ["/", <App />, true],
 ];
